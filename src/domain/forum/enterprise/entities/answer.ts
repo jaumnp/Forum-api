@@ -1,7 +1,7 @@
-import type { Slug } from "./value-objects/slug.js";
-import { Entity } from "../../../../core/entities/entity.js";
-import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
-import type { Optional } from "../../../../core/types/options.js";
+import type { Slug } from "./value-objects/slug.ts";
+import { Entity } from "../../../../core/entities/entity.ts";
+import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
+import type { Optional } from "../../../../core/types/options.ts";
 import dayjs from "dayjs";
 
 interface IAnswareProps {
