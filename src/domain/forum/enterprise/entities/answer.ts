@@ -14,11 +14,15 @@ interface IAnswareProps {
 }
 
 export class Answer extends Entity<IAnswareProps> {
-  create(props: Optional<IAnswareProps, "createdAt">, id?: UniqueEntityId) {
+  static create(
+    props: Optional<IAnswareProps, "createdAt" | "updatedAt">,
+    id?: UniqueEntityId,
+  ) {
     const answer = new Answer(
       {
         ...props,
         createdAt: new Date(),
+        updatedAt: new Date(),
       },
       id,
     );

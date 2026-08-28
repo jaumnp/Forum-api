@@ -1,3 +1,4 @@
+import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import { Answer } from "../../enterprise/entities/answer.js";
 import { Slug } from "../../enterprise/entities/value-objects/slug.js";
 import type { IAnswareRepository } from "../repository/answer-respository.js";
@@ -18,9 +19,9 @@ export class AnswerQuestion {
     content,
     slug,
   }: IAnswerQuestionRequest) {
-    const answer = new Answer({
-      authorId: instructorId,
-      questionId,
+    const answer = Answer.create({
+      authorId: new UniqueEntityId(instructorId),
+      questionId: new UniqueEntityId(questionId),
       content,
       slug,
     });
