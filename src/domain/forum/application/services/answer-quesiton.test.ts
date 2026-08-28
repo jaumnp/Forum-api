@@ -1,7 +1,7 @@
 import { it, expect } from "vitest";
 import { CreateAnswerQuestion } from "./answer-question.ts";
 import { Slug } from "../../enterprise/entities/value-objects/slug.ts";
-import { AnswerInMemoryRepository } from "../repository/InMemory/answersInMemory.repository.ts";
+import { AnswerInMemoryRepository } from "../../../../../test/repository/InMemory/answersInMemory.repository.ts";
 import { beforeEach, describe } from "vitest";
 
 let repository: AnswerInMemoryRepository;

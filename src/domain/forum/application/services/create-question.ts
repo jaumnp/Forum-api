@@ -1,6 +1,6 @@
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import { Question } from "../../enterprise/entities/question.ts";
-import type { IQuestion } from "../repository/create-repository.ts";
+import type { IQuestionRepository } from "../repository/question-repository.ts";
 
 interface ICreateQuestionRequest {
   authorId: string;
@@ -9,14 +9,14 @@ interface ICreateQuestionRequest {
 }
 
 export class CreateQuestion {
-  constructor(private repository: IQuestion) {}
+  constructor(private repository: IQuestionRepository) {}
 
   async execute({ authorId, title, content }: ICreateQuestionRequest) {
     if (content.length > 2400)
       throw new Error("Maximun content length reached!");
 
     const question = Question.create({
-      authorId: new UniqueEntityId(authorId),
+      authorId: UniqueEntityId.create(authorId),
       title,
       content,
     });

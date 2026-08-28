@@ -20,8 +20,8 @@ export class CreateAnswerQuestion {
     slug,
   }: IAnswerQuestionRequest) {
     const answer = Answer.create({
-      authorId: new UniqueEntityId(instructorId),
-      questionId: new UniqueEntityId(questionId),
+      authorId: UniqueEntityId.create(instructorId),
+      questionId: UniqueEntityId.create(questionId),
       content,
       slug,
     });
