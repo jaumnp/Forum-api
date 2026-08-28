@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import { AnswerQuestion } from "./answer-question.js";
 import type { IAnswareRepository } from "../repository/answer-respository.js";
-import type { Answer } from "../entities/answer.js";
-import { Slug } from "../entities/value-objects/slug.js";
+import type { Answer } from "../../enterprise/entities/answer.js";
+import { Slug } from "../../enterprise/entities/value-objects/slug.js";
 
 const rep: IAnswareRepository = {
   create: async (answer: Answer) => {

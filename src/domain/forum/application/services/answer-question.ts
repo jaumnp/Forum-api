@@ -1,5 +1,5 @@
-import { Answer } from "../entities/answer.js";
-import { Slug } from "../entities/value-objects/slug.js";
+import { Answer } from "../../enterprise/entities/answer.js";
+import { Slug } from "../../enterprise/entities/value-objects/slug.js";
 import type { IAnswareRepository } from "../repository/answer-respository.js";
 
 interface IAnswerQuestionRequest {
