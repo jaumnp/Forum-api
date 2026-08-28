@@ -1,7 +1,7 @@
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import { Answer } from "../../enterprise/entities/answer.js";
 import { Slug } from "../../enterprise/entities/value-objects/slug.js";
-import type { IAnswareRepository } from "../repository/answer-respository.js";
+import type { IAnswerRepository } from "../repository/answer-repository.ts";
 
 interface IAnswerQuestionRequest {
   instructorId: string;
@@ -10,8 +10,8 @@ interface IAnswerQuestionRequest {
   slug: Slug;
 }
 
-export class AnswerQuestion {
-  constructor(private repository: IAnswareRepository) {}
+export class CreateAnswerQuestion {
+  constructor(private repository: IAnswerRepository) {}
 
   async execute({
     instructorId,
@@ -30,6 +30,8 @@ export class AnswerQuestion {
 
     await this.repository.create(answer);
 
-    return answer;
+    return {
+      answer,
+    };
   }
 }

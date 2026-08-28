@@ -1,25 +1,27 @@
-import { test, expect } from "vitest";
-import { AnswerQuestion } from "./answer-question.ts";
-import type { IAnswareRepository } from "../repository/answer-respository.ts";
-import type { Answer } from "../../enterprise/entities/answer.ts";
+import { it, expect } from "vitest";
+import { CreateAnswerQuestion } from "./answer-question.ts";
 import { Slug } from "../../enterprise/entities/value-objects/slug.ts";
+import { AnswerInMemoryRepository } from "../repository/InMemory/answersInMemory.repository.ts";
+import { beforeEach, describe } from "vitest";
 
-const rep: IAnswareRepository = {
-  create: async (answer: Answer) => {
-    return;
-  },
-};
+let repository: AnswerInMemoryRepository;
+let sut: CreateAnswerQuestion;
 
-test("Test answer response", async () => {
-  const answerQuestion = new AnswerQuestion(rep);
-
-  const answer = await answerQuestion.execute({
-    instructorId: "1",
-    questionId: "1",
-    content: "Teste resposta",
-    slug: Slug.createFromText("TesteJB__ "),
+describe("create an answer", () => {
+  beforeEach(() => {
+    repository = new AnswerInMemoryRepository();
+    sut = new CreateAnswerQuestion(repository);
   });
 
-  expect(answer.content).toEqual("Teste resposta");
-  expect(answer.slug.value).toBe("testejb");
+  it("should create an answer", async () => {
+    const { answer } = await sut.execute({
+      instructorId: "1",
+      questionId: "1",
+      content: "Teste resposta",
+      slug: Slug.createFromText("TesteJB__ "),
+    });
+
+    expect(answer.content).toEqual("Teste resposta");
+    expect(answer.slug.value).toBe("testejb");
+  });
 });

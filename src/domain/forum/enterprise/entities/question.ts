@@ -15,14 +15,15 @@ interface IQuestionProps {
 }
 
 export class Question extends Entity<IQuestionProps> {
-  create(
-    props: Optional<IQuestionProps, "createdAt" | "slug">,
+  static create(
+    props: Optional<IQuestionProps, "createdAt" | "updatedAt" | "slug">,
     id?: UniqueEntityId,
   ) {
     const question = new Question(
       {
         ...props,
         createdAt: new Date(),
+        updatedAt: new Date(),
         slug: props.slug ?? Slug.createFromText(props.title),
       },
       id,
@@ -51,7 +52,7 @@ export class Question extends Entity<IQuestionProps> {
   set content(text: string) {
     if (text.length > 2400) throw new Error("Invalid content lenght!");
 
-    this.props.content;
+    this.props.content = text;
     this.touch();
   }
 

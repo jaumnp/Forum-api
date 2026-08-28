@@ -8,10 +8,10 @@ export class UniqueEntityId {
   }
 
   toString() {
-    this.id;
+    return this.id;
   }
 
   toValue() {
-    this.id;
+    return this.id;
   }
 }

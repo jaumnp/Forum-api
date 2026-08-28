@@ -1,5 +1,5 @@
 import type { Answer } from "../../enterprise/entities/answer.ts";
 
-export interface IAnswareRepository {
+export interface IAnswerRepository {
   create(answer: Answer): Promise<void>;
 }
