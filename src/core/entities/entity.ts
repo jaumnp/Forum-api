@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { UniqueEntityId } from "./unique-entity-id.js";
 
 export class Entity<Props> {
