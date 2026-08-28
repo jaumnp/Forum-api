@@ -5,7 +5,7 @@ export class Entity<Props> {
   protected props: Props;
 
   protected constructor(props: Props, id?: UniqueEntityId) {
-    this._id = id ?? new UniqueEntityId();
+    this._id = id ?? UniqueEntityId.create();
     this.props = props;
   }
 
