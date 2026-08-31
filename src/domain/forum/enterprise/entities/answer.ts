@@ -4,7 +4,7 @@ import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
 import type { Optional } from "../../../../core/types/options.js";
 import dayjs from "dayjs";
 
-interface IAnswareProps {
+export interface IAnswareProps {
   authorId: UniqueEntityId;
   questionId: UniqueEntityId;
   content: string;
