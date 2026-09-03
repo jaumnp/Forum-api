@@ -1,5 +1,6 @@
 import type { Question } from "../../../src/domain/forum/enterprise/entities/question.ts";
 import type { IQuestionRepository } from "../../../src/domain/forum/application/repository/question-repository.ts";
+import type { IPaginationParams } from "../../../src/core/repository/pagination-params.ts";
 
 export class QuestionsInMemoryRepository implements IQuestionRepository {
   public items: Question[] = [];
@@ -22,6 +23,14 @@ export class QuestionsInMemoryRepository implements IQuestionRepository {
     if (!question) return null;
 
     return question;
+  }
+
+  async findManyRecent({ page }: IPaginationParams) {
+    const questions = this.items
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20);
+
+    return questions;
   }
 
   async create(question: Question) {

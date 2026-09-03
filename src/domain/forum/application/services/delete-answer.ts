@@ -1,4 +1,3 @@
-import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import type { IAnswerRepository } from "../repository/answer-repository.ts";
 
 interface IDeleteAnswerRequest {

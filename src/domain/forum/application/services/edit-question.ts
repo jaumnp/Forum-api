@@ -1,5 +1,3 @@
-import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
-import { Question } from "../../enterprise/entities/question.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
 
 interface IEditQuestionRequest {

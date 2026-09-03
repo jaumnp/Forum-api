@@ -19,11 +19,12 @@ export class Question extends Entity<IQuestionProps> {
     props: Optional<IQuestionProps, "createdAt" | "updatedAt" | "slug">,
     id?: UniqueEntityId,
   ) {
+    const date = props.createdAt ?? new Date();
     const question = new Question(
       {
         ...props,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
         slug: props.slug ?? Slug.createFromText(props.title),
       },
       id,
@@ -59,9 +60,13 @@ export class Question extends Entity<IQuestionProps> {
   set title(text: string) {
     if (text.length > 120) throw new Error("Invalid content lenght!");
 
-    this.props.content;
+    this.props.title = text;
     this.props.slug = Slug.createFromText(text);
     this.touch();
+  }
+
+  get title() {
+    return this.props.title;
   }
 
   get content() {
@@ -88,5 +93,3 @@ export class Question extends Entity<IQuestionProps> {
     return this.props.slug;
   }
 }
-
-console.log(Question);

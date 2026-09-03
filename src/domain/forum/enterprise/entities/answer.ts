@@ -1,10 +1,10 @@
-import type { Slug } from "./value-objects/slug.js";
+import { Slug } from "./value-objects/slug.js";
 import { Entity } from "../../../../core/entities/entity.js";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
 import type { Optional } from "../../../../core/types/options.js";
 import dayjs from "dayjs";
 
-export interface IAnswareProps {
+export interface IAnswerProps {
   authorId: UniqueEntityId;
   questionId: UniqueEntityId;
   content: string;
@@ -13,16 +13,18 @@ export interface IAnswareProps {
   updatedAt?: Date;
 }
 
-export class Answer extends Entity<IAnswareProps> {
+export class Answer extends Entity<IAnswerProps> {
   static create(
-    props: Optional<IAnswareProps, "createdAt" | "updatedAt">,
+    props: Optional<IAnswerProps, "createdAt" | "updatedAt" | "slug">,
     id?: UniqueEntityId,
   ) {
+    const date = props.createdAt ?? new Date();
     const answer = new Answer(
       {
         ...props,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
+        slug: props.slug ?? Slug.createFromText(props.content),
       },
       id,
     );
@@ -45,7 +47,7 @@ export class Answer extends Entity<IAnswareProps> {
   set content(text: string) {
     if (text.length > 2400) throw new Error("Invalid content lenght!");
 
-    this.props.content;
+    this.props.content = text;
     this.touch();
   }
 
