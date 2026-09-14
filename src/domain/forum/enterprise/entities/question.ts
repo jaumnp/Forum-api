@@ -1,7 +1,7 @@
 import { Slug } from "./value-objects/slug.js";
-import { Entity } from "../../../../core/entities/entity.js";
 import type { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
 import type { Optional } from "../../../../core/types/options.js";
+import { AggregateRoot } from "../../../../core/entities/aggregate-root.ts";
 import dayjs from "dayjs";
 import type { QuestionAttachment } from "./question-attachment.ts";
 import { QuestionAttachmentList } from "./queation-attachment-list.ts";
@@ -17,7 +17,7 @@ export interface IQuestionProps {
   updatedAt?: Date;
 }
 
-export class Question extends Entity<IQuestionProps> {
+export class Question extends AggregateRoot<IQuestionProps> {
   static create(
     props: Optional<
       IQuestionProps,
