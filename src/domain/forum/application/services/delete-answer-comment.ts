@@ -1,4 +1,7 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IAnswerCommentsRepository } from "../repository/answer-comment-repository.ts";
+import { NotAllowed } from "./errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface DeleteAnswerCommentRequest {
   authorId: string;
@@ -13,15 +16,15 @@ export class DeleteAnswerComment {
       await this.answerCommentsRepository.findById(answerCommentId);
 
     if (!answerComment) {
-      throw new Error("Answer comment not found.");
+      return failure(new ResourceNotFoundError());
     }
 
     if (answerComment.authorId.toString() !== authorId) {
-      throw new Error("Not allowed");
+      return failure(new NotAllowed());
     }
 
     await this.answerCommentsRepository.delete(answerComment);
 
-    return {};
+    return success({ message: "Answer deleted successfully" });
   }
 }

@@ -1,33 +1,63 @@
+import { failure, success } from "../../../../core/either.ts";
+import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
+import { QuestionAttachmentList } from "../../enterprise/entities/queation-attachment-list.ts";
+import { QuestionAttachment } from "../../enterprise/entities/question-attachment.ts";
+import type { QuestionAttachmentsRepository } from "../repository/question-attachment-list-repository.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
+import { NotAllowed } from "./errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IEditQuestionRequest {
   questionId: string;
   authorId: string;
   title: string;
   content: string;
+  attachmentsId: string[];
 }
 
 export class EditQuestion {
-  constructor(private repository: IQuestionRepository) {}
+  constructor(
+    private questionRepository: IQuestionRepository,
+    private attachmentsRepository: QuestionAttachmentsRepository,
+  ) {}
 
   async execute({
     questionId,
     authorId,
     title,
     content,
+    attachmentsId,
   }: IEditQuestionRequest) {
-    const question = await this.repository.findById(questionId);
+    const question = await this.questionRepository.findById(questionId);
 
-    if (!question) throw new Error("Question not found!");
+    if (!question)
+      return failure(new ResourceNotFoundError("Question not found!"));
 
     if (authorId !== question.authorId.toString())
-      throw new Error("Author incorrect!");
+      return failure(new NotAllowed("Author incorrect!"));
+
+    const currentAttachments =
+      await this.attachmentsRepository.findManyByQuestionId(questionId);
+
+    const questionAttachmentList = new QuestionAttachmentList(
+      currentAttachments,
+    );
+
+    const questionAttachments = attachmentsId.map((attachment) =>
+      QuestionAttachment.create({
+        attachmentId: UniqueEntityId.create(attachment),
+        questionId: question.id,
+      }),
+    );
+
+    questionAttachmentList.update(questionAttachments);
 
     question.title = title;
     question.content = content;
+    question.attachments = questionAttachmentList;
 
-    await this.repository.save(question);
+    await this.questionRepository.save(question);
 
-    return { message: "Question edited successfully!" };
+    return success({ message: "Question edited successfully!" });
   }
 }

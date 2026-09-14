@@ -32,10 +32,10 @@ export class Success<S, F> {
 
 export type Either<S, F> = Success<S, F> | Failure<S, F>;
 
-export const success = <S, F>(value: S): Either<S, F> => {
+export const success = <S>(value: S): Either<S, never> => {
   return new Success(value);
 };
 
-export const failure = <S, F>(value: F): Either<S, F> => {
+export const failure = <F>(value: F): Either<never, F> => {
   return new Failure(value);
 };

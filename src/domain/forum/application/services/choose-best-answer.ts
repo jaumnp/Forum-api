@@ -1,5 +1,8 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IAnswerRepository } from "../repository/answer-repository.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
+import { NotAllowed } from "./errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IChooseBestAnswerRequest {
   answerId: string;
@@ -15,21 +18,22 @@ export class EditAnswer {
   async execute({ answerId, authorId }: IChooseBestAnswerRequest) {
     const answer = await this.answersRepository.findById(answerId);
 
-    if (!answer) throw new Error("Answer not found.");
+    if (!answer) return failure(new ResourceNotFoundError("Answer not found."));
 
     const question = await this.questionsRepository.findById(
       answer.questionId.toString(),
     );
 
-    if (!question) throw new Error("Question not found.");
+    if (!question)
+      return failure(new ResourceNotFoundError("Question not found."));
 
     if (authorId !== question.authorId.toString())
-      throw new Error("Not allowed!");
+      return failure(new NotAllowed("Not allowed!"));
 
     question.bestAnswerId = answer.id;
 
     await this.questionsRepository.save(question);
 
-    return { message: "Best answer selected successfuly!" };
+    return success({ message: "Best answer selected successfuly!" });
   }
 }

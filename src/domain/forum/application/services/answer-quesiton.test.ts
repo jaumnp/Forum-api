@@ -14,13 +14,17 @@ describe("create an answer", () => {
   });
 
   it("should create an answer", async () => {
-    const { answer } = await sut.execute({
+    const result = await sut.execute({
       instructorId: "1",
       questionId: "1",
       content: "Teste resposta",
       slug: Slug.createFromText("TesteJB__ "),
     });
 
+    expect(result.isSuccess()).toBe(true);
+    if (result.isFailure()) return;
+
+    const { answer } = result.value;
     expect(answer.content).toEqual("Teste resposta");
     expect(answer.slug.value).toBe("testejb");
   });

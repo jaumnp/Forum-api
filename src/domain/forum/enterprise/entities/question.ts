@@ -3,12 +3,15 @@ import { Entity } from "../../../../core/entities/entity.js";
 import type { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
 import type { Optional } from "../../../../core/types/options.js";
 import dayjs from "dayjs";
+import type { QuestionAttachment } from "./question-attachment.ts";
+import { QuestionAttachmentList } from "./queation-attachment-list.ts";
 
 export interface IQuestionProps {
   authorId: UniqueEntityId;
   bestAnswerId?: UniqueEntityId;
   title: string;
   content: string;
+  attachments: QuestionAttachmentList;
   slug: Slug;
   createdAt: Date;
   updatedAt?: Date;
@@ -16,7 +19,10 @@ export interface IQuestionProps {
 
 export class Question extends Entity<IQuestionProps> {
   static create(
-    props: Optional<IQuestionProps, "createdAt" | "updatedAt" | "slug">,
+    props: Optional<
+      IQuestionProps,
+      "createdAt" | "updatedAt" | "slug" | "attachments"
+    >,
     id?: UniqueEntityId,
   ) {
     const date = props.createdAt ?? new Date();
@@ -25,6 +31,7 @@ export class Question extends Entity<IQuestionProps> {
         ...props,
         createdAt: date,
         updatedAt: date,
+        attachments: props.attachments ?? new QuestionAttachmentList(),
         slug: props.slug ?? Slug.createFromText(props.title),
       },
       id,
@@ -48,6 +55,14 @@ export class Question extends Entity<IQuestionProps> {
 
   get bestAnswerId() {
     return this.props.bestAnswerId as UniqueEntityId;
+  }
+
+  get attachments() {
+    return this.props.attachments;
+  }
+
+  set attachments(attachments: QuestionAttachmentList) {
+    this.props.attachments = attachments;
   }
 
   set content(text: string) {

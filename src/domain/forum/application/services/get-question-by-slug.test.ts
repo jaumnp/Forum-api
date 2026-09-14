@@ -19,18 +19,24 @@ describe("Get question by slug", () => {
 
     await repository.create(newQuestion);
 
-    const { question } = await sut.execute({ slug: "test" });
+    const result = await sut.execute({ slug: "test" });
 
-    expect(question.slug.value).toBe("test");
+    expect(result.isSuccess()).toBe(true);
+    if (result.isFailure()) return;
+
+    expect(result.value.question.slug.value).toBe("test");
   });
 
-  it("should throw an error trying to get a question", async () => {
+  it("should return an error trying to get a question", async () => {
     const newQuestion = makeQuestion();
 
     await repository.create(newQuestion);
 
-    await expect(sut.execute({ slug: "jawida" })).rejects.toThrow(
-      "Question not found!",
-    );
+    const result = await sut.execute({ slug: "jawida" });
+
+    expect(result.isFailure()).toBe(true);
+    if (result.isFailure()) {
+      expect(result.value.message).toBe("Question not found!");
+    }
   });
 });

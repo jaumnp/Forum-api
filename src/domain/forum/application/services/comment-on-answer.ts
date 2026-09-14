@@ -1,7 +1,9 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IAnswerRepository } from "../repository/answer-repository.ts";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import { AnswerComment } from "../../enterprise/entities/answer-comment.ts";
 import type { IAnswerCommentsRepository } from "../repository/answer-comment-repository.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface CommentOnAnswerRequest {
   authorId: string;
@@ -19,7 +21,7 @@ export class CommentOnAnswer {
     const answer = await this.answersRepository.findById(answerId);
 
     if (!answer) {
-      throw new Error("Answer not found.");
+      return failure(new ResourceNotFoundError("Answer not found."));
     }
 
     const answerComment = AnswerComment.create({
@@ -30,8 +32,8 @@ export class CommentOnAnswer {
 
     await this.answerCommentsRepository.create(answerComment);
 
-    return {
+    return success({
       answerComment,
-    };
+    });
   }
 }

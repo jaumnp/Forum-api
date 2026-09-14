@@ -33,11 +33,11 @@ describe("Delete Question Comment", () => {
 
     await repository.create(questionComment);
 
-    expect(() => {
-      return sut.execute({
-        questionCommentId: questionComment.id.toString(),
-        authorId: "author-2",
-      });
-    }).rejects.toBeInstanceOf(Error);
+    const result = await sut.execute({
+      questionCommentId: questionComment.id.toString(),
+      authorId: "author-2",
+    });
+
+    expect(result.isFailure()).toBe(true);
   });
 });

@@ -3,13 +3,16 @@ import { QuestionsInMemoryRepository } from "../../../../../test/repository/InMe
 import { beforeEach, describe, it } from "vitest";
 import { DeleteQuestion } from "./delete-question.ts";
 import { makeQuestion } from "../../../../../test/factory/make-question.ts";
+import { QuestionAttachmentInMemoryRepository } from "../../../../../test/repository/InMemory/questioAttachmentInMemoryRepository.ts";
 
 let repository: QuestionsInMemoryRepository;
+let attachmentRepository: QuestionAttachmentInMemoryRepository;
 let sut: DeleteQuestion;
 
 describe("delete a question", () => {
   beforeEach(() => {
-    repository = new QuestionsInMemoryRepository();
+    attachmentRepository = new QuestionAttachmentInMemoryRepository();
+    repository = new QuestionsInMemoryRepository(attachmentRepository);
     sut = new DeleteQuestion(repository);
   });
 
@@ -19,16 +22,22 @@ describe("delete a question", () => {
 
     const questions = await repository.findAll();
 
-    const { message } = await sut.execute({
+    const result = await sut.execute({
       id: questions[0]?.id.toString() as string,
     });
 
-    expect(message).toBe("Question deleted successfully!");
+    expect(result.isSuccess()).toBe(true);
+    if (result.isSuccess()) {
+      expect(result.value.message).toBe("Question deleted successfully!");
+    }
   });
 
-  it("should throw an error trying to delete a question with incorrect id", async () => {
-    await expect(sut.execute({ id: "ajwdjiawd" })).rejects.toThrow(
-      "Question not found!",
-    );
+  it("should return an error trying to delete a question with incorrect id", async () => {
+    const result = await sut.execute({ id: "ajwdjiawd" });
+
+    expect(result.isFailure()).toBe(true);
+    if (result.isFailure()) {
+      expect(result.value.message).toBe("Question not found!");
+    }
   });
 });

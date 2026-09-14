@@ -1,7 +1,9 @@
+import { failure, success } from "../../../../core/either.ts";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
 import { Answer } from "../../enterprise/entities/answer.js";
 import { Slug } from "../../enterprise/entities/value-objects/slug.js";
 import type { IAnswerRepository } from "../repository/answer-repository.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IAnswerQuestionRequest {
   instructorId: string;
@@ -26,12 +28,13 @@ export class CreateAnswerQuestion {
       slug,
     });
 
-    if (!answer) throw new Error("Pergunta incorreta!");
+    if (!answer)
+      return failure(new ResourceNotFoundError("Pergunta incorreta!"));
 
     await this.repository.create(answer);
 
-    return {
+    return success({
       answer,
-    };
+    });
   }
 }

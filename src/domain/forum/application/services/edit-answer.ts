@@ -1,4 +1,7 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IAnswerRepository } from "../repository/answer-repository.ts";
+import { NotAllowed } from "./errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IEditAnswerRequest {
   answerId: string;
@@ -12,15 +15,15 @@ export class EditAnswer {
   async execute({ answerId, authorId, content }: IEditAnswerRequest) {
     const answer = await this.repository.findById(answerId);
 
-    if (!answer) throw new Error("Answer not found!");
+    if (!answer) return failure(new ResourceNotFoundError("Answer not found!"));
 
     if (authorId !== answer.authorId.toString())
-      throw new Error("Author incorrect!");
+      return failure(new NotAllowed("Author incorrect!"));
 
     answer.content = content;
 
     await this.repository.save(answer);
 
-    return { message: "Answer edited successfully!" };
+    return success({ message: "Answer edited successfully!" });
   }
 }

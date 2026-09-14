@@ -1,4 +1,6 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IDeleteQuestionRequest {
   id: string;
@@ -10,10 +12,11 @@ export class DeleteQuestion {
   async execute({ id }: IDeleteQuestionRequest) {
     const question = await this.repository.findById(id);
 
-    if (!question) throw new Error("Question not found!");
+    if (!question)
+      return failure(new ResourceNotFoundError("Question not found!"));
 
     await this.repository.delete(question);
 
-    return { message: "Question deleted successfully!" };
+    return success({ message: "Question deleted successfully!" });
   }
 }

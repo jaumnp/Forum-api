@@ -1,5 +1,7 @@
+import { failure, success } from "../../../../core/either.ts";
 import { Slug } from "../../enterprise/entities/value-objects/slug.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface IGetQuestionBySlugRequest {
   slug: string;
@@ -11,8 +13,9 @@ export class GetQuestionBySlug {
   async execute({ slug }: IGetQuestionBySlugRequest) {
     const question = await this.repository.findBySlug(slug);
 
-    if (!question) throw new Error("Question not found!");
+    if (!question)
+      return failure(new ResourceNotFoundError("Question not found!"));
 
-    return { question };
+    return success({ question });
   }
 }

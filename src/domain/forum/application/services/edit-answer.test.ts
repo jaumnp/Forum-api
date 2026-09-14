@@ -45,12 +45,12 @@ describe("Edit Answer", () => {
 
     await repository.create(newAnswer);
 
-    expect(() => {
-      return sut.execute({
-        answerId: newAnswer.id.toValue(),
-        authorId: "author-2",
-        content: "Conteúdo teste",
-      });
-    }).rejects.toBeInstanceOf(Error);
+    const result = await sut.execute({
+      answerId: newAnswer.id.toValue(),
+      authorId: "author-2",
+      content: "Conteúdo teste",
+    });
+
+    expect(result.isFailure()).toBe(true);
   });
 });

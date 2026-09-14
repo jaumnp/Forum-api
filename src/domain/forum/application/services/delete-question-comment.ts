@@ -1,4 +1,7 @@
+import { failure, success } from "../../../../core/either.ts";
 import type { IQuestionCommentsRepository } from "../repository/questio-comment-repository.ts";
+import { NotAllowed } from "./errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
 
 interface DeleteQuestionCommentRequest {
   authorId: string;
@@ -15,15 +18,15 @@ export class DeleteQuestionComment {
       await this.questionCommentsRepository.findById(questionCommentId);
 
     if (!questionComment) {
-      throw new Error("Answer comment not found.");
+      return failure(new ResourceNotFoundError("Answer comment not found."));
     }
 
     if (questionComment.authorId.toString() !== authorId) {
-      throw new Error("Not allowed");
+      return failure(new NotAllowed("Not allowed"));
     }
 
     await this.questionCommentsRepository.delete(questionComment);
 
-    return {};
+    return success({});
   }
 }
