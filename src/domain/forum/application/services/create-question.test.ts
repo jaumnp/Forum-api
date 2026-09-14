@@ -3,13 +3,16 @@ import { CreateQuestion } from "./create-question.ts";
 import { QuestionsInMemoryRepository } from "../../../../../test/repository/InMemory/questiosInMemory.repository.ts";
 import { beforeEach, describe, it } from "vitest";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
+import { QuestionAttachmentInMemoryRepository } from "../../../../../test/repository/InMemory/questioAttachmentInMemoryRepository.ts";
 
 let repository: QuestionsInMemoryRepository;
+let questionAttachmentRepository: QuestionAttachmentInMemoryRepository;
 let sut: CreateQuestion;
 
 describe("create a question", () => {
   beforeEach(() => {
-    repository = new QuestionsInMemoryRepository();
+    questionAttachmentRepository = new QuestionAttachmentInMemoryRepository();
+    repository = new QuestionsInMemoryRepository(questionAttachmentRepository);
     sut = new CreateQuestion(repository);
   });
 
