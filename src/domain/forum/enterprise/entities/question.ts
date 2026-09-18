@@ -4,7 +4,7 @@ import type { Optional } from "../../../../core/types/options.js";
 import { AggregateRoot } from "../../../../core/entities/aggregate-root.ts";
 import dayjs from "dayjs";
 import type { QuestionAttachment } from "./question-attachment.ts";
-import { QuestionAttachmentList } from "./queation-attachment-list.ts";
+import { QuestionAttachmentList } from "./question-attachment-list.ts";
 
 export interface IQuestionProps {
   authorId: UniqueEntityId;

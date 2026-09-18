@@ -2,14 +2,12 @@ import type { IPaginationParams } from "../../../../core/repository/pagination-p
 import type { Answer } from "../../enterprise/entities/answer.ts";
 
 export interface IAnswerRepository {
-  findAll(): Promise<Answer[] | null>;
   findById(id: string): Promise<Answer | null>;
-  findBySlug(slug: string): Promise<Answer | null>;
   findManyByQuestionId(
     questionId: string,
     params: IPaginationParams,
   ): Promise<Answer[]>;
+  create(answer: Answer): Promise<void>;
   save(answer: Answer): Promise<void>;
-  create(Answer: Answer): Promise<void>;
   delete(answer: Answer): Promise<void>;
 }

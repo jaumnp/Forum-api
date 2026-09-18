@@ -1,21 +1,22 @@
-import { Slug } from "./value-objects/slug.js";
-import { Entity } from "../../../../core/entities/entity.js";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.js";
 import type { Optional } from "../../../../core/types/options.js";
 import dayjs from "dayjs";
+import { AnswerAttachmentList } from "./answer-attachment-list.ts";
+import { AnswerCreatedEvent } from "../events/answer-created-event.ts";
+import { AggregateRoot } from "../../../../core/entities/aggregate-root.ts";
 
 export interface IAnswerProps {
   authorId: UniqueEntityId;
   questionId: UniqueEntityId;
   content: string;
-  slug: Slug;
+  attachments: AnswerAttachmentList;
   createdAt: Date;
   updatedAt?: Date;
 }
 
-export class Answer extends Entity<IAnswerProps> {
+export class Answer extends AggregateRoot<IAnswerProps> {
   static create(
-    props: Optional<IAnswerProps, "createdAt" | "updatedAt" | "slug">,
+    props: Optional<IAnswerProps, "createdAt" | "updatedAt" | "attachments">,
     id?: UniqueEntityId,
   ) {
     const date = props.createdAt ?? new Date();
@@ -24,10 +25,16 @@ export class Answer extends Entity<IAnswerProps> {
         ...props,
         createdAt: date,
         updatedAt: date,
-        slug: props.slug ?? Slug.createFromText(props.content),
+        attachments: props.attachments ?? new AnswerAttachmentList(),
       },
       id,
     );
+
+    const isNewAnswer = !id;
+
+    if (isNewAnswer) {
+      answer.addDomainEvent(new AnswerCreatedEvent(answer));
+    }
 
     return answer;
   }
@@ -51,6 +58,15 @@ export class Answer extends Entity<IAnswerProps> {
     this.touch();
   }
 
+  get attachments() {
+    return this.props.attachments;
+  }
+
+  set attachments(attachments: AnswerAttachmentList) {
+    this.props.attachments = attachments;
+    this.touch();
+  }
+
   get content() {
     return this.props.content;
   }
@@ -69,9 +85,5 @@ export class Answer extends Entity<IAnswerProps> {
 
   get updatedAt() {
     return this.props.updatedAt;
-  }
-
-  get slug() {
-    return this.props.slug;
   }
 }

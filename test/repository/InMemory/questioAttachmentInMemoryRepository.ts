@@ -1,4 +1,4 @@
-import type { QuestionAttachmentsRepository } from "../../../src/domain/forum/application/repository/question-attachment-list-repository.ts";
+import type { QuestionAttachmentsRepository } from "../../../src/domain/forum/application/repository/question-attachment-repository.ts";
 import type { QuestionAttachment } from "../../../src/domain/forum/enterprise/entities/question-attachment.ts";
 
 export class QuestionAttachmentInMemoryRepository implements QuestionAttachmentsRepository {

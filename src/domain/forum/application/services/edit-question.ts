@@ -1,11 +1,11 @@
 import { failure, success } from "../../../../core/either.ts";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
-import { QuestionAttachmentList } from "../../enterprise/entities/queation-attachment-list.ts";
+import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list.ts";
 import { QuestionAttachment } from "../../enterprise/entities/question-attachment.ts";
-import type { QuestionAttachmentsRepository } from "../repository/question-attachment-list-repository.ts";
+import type { QuestionAttachmentsRepository } from "../repository/question-attachment-repository.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
-import { NotAllowed } from "./errors/not-allowed-error.ts";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error.ts";
+import { NotAllowed } from "../../../../core/errors/errors/not-allowed-error.ts";
+import { ResourceNotFoundError } from "../../../../core/errors/errors/resource-not-found-error.ts";
 
 interface IEditQuestionRequest {
   questionId: string;

@@ -1,10 +1,10 @@
 import { failure, success } from "../../../../core/either.ts";
 import { UniqueEntityId } from "../../../../core/entities/unique-entity-id.ts";
-import { QuestionAttachmentList } from "../../enterprise/entities/queation-attachment-list.ts";
+import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list.ts";
 import { QuestionAttachment } from "../../enterprise/entities/question-attachment.ts";
 import { Question } from "../../enterprise/entities/question.ts";
 import type { IQuestionRepository } from "../repository/question-repository.ts";
-import { ContentLengthError } from "./errors/content-length-error.ts";
+import { ContentLengthError } from "../../../../core/errors/errors/content-length-error.ts";
 
 interface ICreateQuestionRequest {
   authorId: string;
